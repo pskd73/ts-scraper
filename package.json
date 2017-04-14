@@ -4,12 +4,15 @@
   "description": "Scarp links present in the website recursively",
   "main": "index.js",
   "scripts": {
+    "start": "NODE_PATH=./ node app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Pramod Kumar",
   "license": "MIT",
   "dependencies": {
     "@types/lodash": "^4.14.62",
+    "@types/node": "^7.0.12",
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "uniqid": "^4.1.1"
   }
