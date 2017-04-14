@@ -1,6 +1,5 @@
 import CoreJob from 'app/core/CoreJob';
 import ScrapPage from 'app/core/ScrapPage';
-import Scrapper from 'app/core/Scrapper';
 
 class Job extends CoreJob {
 

@@ -4,25 +4,26 @@ import ScrapperContracts from 'app/contracts/ScrapperContracts';
 import * as Request from 'request';
 import * as jsdom from 'jsdom';
 import * as jquery from 'jquery';
-import * as ParseUrl from 'parse-url';
 
-class Scrapper implements ScrapperContracts {
+abstract class CoreScrapper implements ScrapperContracts {
 
-    private jobrunner: JobRunner
-    private initPage: string
-    private scrappedPages: Array<string> = []
-    private completedLinks: Array<string> = []
+    protected jobrunner: JobRunner
+    protected initPage: string
+    protected scrappedPages: Array<string> = []
+    protected completedLinks: Array<string> = []
+    protected concurrentConnections: number
 
-    constructor(initPage){
+    constructor(initPage: string, concurrentConnections: number = 5){
         this.initPage = initPage;
-        this.jobrunner = new JobRunner(20);
+        this.concurrentConnections = concurrentConnections;
+        this.jobrunner = new JobRunner(this.concurrentConnections);
         this.jobrunner.add(new Job(this, this.initPage));
         this.scrappedPages.push(this.initPage);
     }
 
-    public onScrapResponse(links, parentLink){
+    protected onScrapResponse(links, parentLink){
         this.completedLinks.push(parentLink);
-        console.log('completed link', parentLink, this.scrappedPages.length);
+        this.onFetchComplete(parentLink, this.completedLinks, this.scrappedPages);
         for(var i=0;i<links.length;i++){
             const actualLink = links[i];
             const parsedLink = this.serializeUrl(actualLink);
@@ -35,15 +36,14 @@ class Scrapper implements ScrapperContracts {
         }
     }
 
-    protected canFetchUrl(url){
-        const parsedUrl = ParseUrl(this.initPage);
-        return url && url.indexOf(parsedUrl.resource) != -1;
-    }
-
     protected serializeUrl(url){
         const parsedUrl = ParseUrl(url);
         return '//'+ parsedUrl.resource + parsedUrl.pathname;
     }
+
+    protected abstract onFetchComplete(link: string, completedLinks: Array<string>, totalScrapedLinks: Array<string>)
+
+    protected abstract canFetchUrl(url: string): boolean
 
     public start(){
         this.jobrunner.start();
@@ -51,4 +51,4 @@ class Scrapper implements ScrapperContracts {
 
 }
 
-export default Scrapper;
+export default CoreScrapper;
