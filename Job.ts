@@ -15,16 +15,12 @@ class Job extends CoreJob {
     }
 
     async run(){
-        return new Promise((resolve, reject) => {
-            this.scrapPage.get()
-                .then((links) => {
-                    this.scrapper.onScrapResponse(links, this.url);
-                    resolve({
-                        status: true,
-                        response: links
-                    });
-                })
-        });
+        const response = await this.scrapPage.get();
+        this.scrapper.onScrapResponse(response.links, this.url);
+        return {
+            status: true,
+            response: response
+        };
     }
 }
 

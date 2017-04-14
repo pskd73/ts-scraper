@@ -4,6 +4,7 @@ import ScrapperContracts from 'app/contracts/ScrapperContracts';
 import * as Request from 'request';
 import * as jsdom from 'jsdom';
 import * as jquery from 'jquery';
+import * as ParseUrl from 'parse-url';
 
 abstract class CoreScrapper implements ScrapperContracts {
 
@@ -12,6 +13,7 @@ abstract class CoreScrapper implements ScrapperContracts {
     protected scrappedPages: Array<string> = []
     protected completedLinks: Array<string> = []
     protected concurrentConnections: number
+    protected startTime: Date
 
     constructor(initPage: string, concurrentConnections: number = 5){
         this.initPage = initPage;
@@ -41,11 +43,27 @@ abstract class CoreScrapper implements ScrapperContracts {
         return '//'+ parsedUrl.resource + parsedUrl.pathname;
     }
 
+    public getDiffTime(){
+        const now = new Date();
+        return now.getTime() - this.startTime.getTime();
+    }
+
+    public getScrapeRate(){
+        const diff = this.getDiffTime();
+        return (this.completedLinks.length/diff)*1000;
+    }
+
+    public getLinkCollectRate(){
+        const diff = this.getDiffTime();
+        return (this.scrappedPages.length/diff)*1000;
+    }
+
     protected abstract onFetchComplete(link: string, completedLinks: Array<string>, totalScrapedLinks: Array<string>)
 
     protected abstract canFetchUrl(url: string): boolean
 
     public start(){
+        this.startTime = new Date();
         this.jobrunner.start();
     }
 
