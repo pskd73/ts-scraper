@@ -53,11 +53,13 @@ class JobRunner implements JobRunnerContracts {
         return Lodash.every(this.pipe, (job) => job === null);
     }
 
+    getPipe() {
+        return this.pipe;
+    }
+
     add(list) {
         this.que = Lodash.concat(this.que, list);
-        if(this.isPipeDone()){
-            this.appendJobs();
-        }
+        this.appendJobs();
     }
 
     start(){
