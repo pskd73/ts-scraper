@@ -1,6 +1,6 @@
-import CoreScrapper from 'app/core/CoreScrapper';
+import CoreScrapper from 'app/scraper/CoreScraper';
 import ScrapJob from 'app/ScrapJob';
-import ScrapeResponse from 'app/contracts/ScrapResponse';
+import ScrapeResponse from 'app/scraper/contracts/ScrapResponse';
 import * as ParseUrl from 'parse-url';
 import * as fs from 'fs';
 
@@ -28,8 +28,8 @@ class Scrapper extends CoreScrapper {
         }
     }
 
-    protected canFetchUrl(response){
-        return this.isSameSource(response);
+    protected canFetchUrl(url){
+        return this.isSameSource(url);
     }
 
     protected createJob(link){
@@ -49,7 +49,7 @@ class Scrapper extends CoreScrapper {
 
     protected checkForPage(response){
         const url = response.url;
-        if(!this.isSameSource(response)){
+        if(!this.isSameSource(response.url)){
             return false;
         }
         this.interestedUrls.push(url);

@@ -1,4 +1,4 @@
-import JobResponse from 'app/contracts/JobResponse';
+import JobResponse from 'app/jobrunner/contracts/JobResponse';
 
 interface JobContract {
     id: number

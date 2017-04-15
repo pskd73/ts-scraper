@@ -1,8 +1,8 @@
-import JobRunnerContracts from 'app/contracts/JobRunnerContracts';
-import CoreJob from 'app/core/CoreJob';
-import JobDescription from 'app/contracts/JobDescription';
-import PriorityQue from 'app/contracts/PriorityQue';
-import PriorityElement from 'app/contracts/PriorityElement';
+import CoreJob from 'app/jobrunner/CoreJob';
+import JobDescription from 'app/jobrunner/contracts/JobDescription';
+import PriorityQue from 'app/jobrunner/contracts/PriorityQue';
+import PriorityElement from 'app/jobrunner/contracts/PriorityElement';
+import JobRunnerContracts from 'app/jobrunner/contracts/JobRunnerContracts';
 import * as Lodash from 'lodash';
 
 class JobRunner implements JobRunnerContracts {

@@ -1,6 +1,6 @@
 interface JobResponse {
     status: boolean,
-    response: Object,
+    response: any,
 }
 
 export default JobResponse;

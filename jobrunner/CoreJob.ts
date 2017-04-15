@@ -1,6 +1,6 @@
-import JobContract from 'app/contracts/JobContract';
-import JobResponse from 'app/contracts/JobResponse';
-import JobStates from 'app/contracts/JobStates';
+import JobContract from 'app/jobrunner/contracts/JobContract';
+import JobResponse from 'app/jobrunner/contracts/JobResponse';
+import JobStates from 'app/jobrunner/contracts/JobStates';
 import * as uniqid from 'uniqid';
 
 abstract class CoreJob implements JobContract {

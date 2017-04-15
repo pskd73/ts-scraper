@@ -1,6 +1,6 @@
-import CoreJob from 'app/core/CoreJob';
-import ScrapPage from 'app/core/ScrapPage';
-import CoreScrapper from 'app/core/CoreScrapper';
+import CoreJob from 'app/jobrunner/CoreJob';
+import LinkPageScraper from 'app/LinkPageScraper';
+import CoreScraper from 'app/scraper/CoreScraper';
 
 class ScrapJob extends CoreJob {
 
@@ -8,16 +8,16 @@ class ScrapJob extends CoreJob {
     private scrapper;
     private url;
 
-    constructor(url: string, scrapper?: CoreScrapper){
+    constructor(url: string, scrapper?: CoreScraper){
         super();
         this.url = url;
         this.scrapper = scrapper;
-        this.scrapPage = new ScrapPage(this.url);
+        this.scrapPage = new LinkPageScraper(this.url);
     }
 
     async run(){
         try {
-            const response = await this.scrapPage.get();
+            const response = await this.scrapPage.start();
             if(this.scrapper){
                 this.scrapper.onScrapResponse(response, this.url);
             }

@@ -1,4 +1,4 @@
-import CoreJob from 'app/core/CoreJob';
+import CoreJob from 'app/jobrunner/CoreJob';
 
 interface JobRunnerContracts {
     add(list: Array<CoreJob>|CoreJob): void

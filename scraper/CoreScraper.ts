@@ -1,13 +1,13 @@
-import JobRunner from 'app/core/JobRunner';
-import CoreJob from 'app/core/CoreJob';
-import ScrapperContracts from 'app/contracts/ScrapperContracts';
-import ScrapResponse from 'app/contracts/ScrapResponse';
+import JobRunner from 'app/jobrunner/JobRunner';
+import CoreJob from 'app/jobrunner/CoreJob';
+import ScrapperContracts from 'app/scraper/contracts/ScrapperContracts';
+import ScrapResponse from 'app/scraper/contracts/ScrapResponse';
 import * as Request from 'request';
 import * as jsdom from 'jsdom';
 import * as jquery from 'jquery';
 import * as ParseUrl from 'parse-url';
 
-abstract class CoreScrapper implements ScrapperContracts {
+abstract class CoreScraper implements ScrapperContracts {
 
     protected jobrunner: JobRunner
     protected initPage: string
@@ -32,14 +32,16 @@ abstract class CoreScrapper implements ScrapperContracts {
         const links = response.links;
         for(var i=0;i<links.length;i++){
             const actualLink = links[i];
-            const parsedLink = this.serializeUrl(actualLink);
-            if(this.scrappedPages.indexOf(parsedLink) == -1){
-                if(this.canFetchUrl(response)){
-                    const job = this.createJob(actualLink);
-                    this.jobrunner.add(job);
+            if(actualLink){
+                const parsedLink = this.serializeUrl(actualLink);
+                if(this.scrappedPages.indexOf(parsedLink) == -1){
+                    if(this.canFetchUrl(actualLink)){
+                        const job = this.createJob(actualLink);
+                        this.jobrunner.add(job);
+                    }
+                    this.scrappedPages.push(parsedLink);
+                    this.scrappedActualPages.push(actualLink);
                 }
-                this.scrappedPages.push(parsedLink);
-                this.scrappedActualPages.push(actualLink);
             }
         }
     }
@@ -68,9 +70,9 @@ abstract class CoreScrapper implements ScrapperContracts {
         return 10;
     }
 
-    protected isSameSource(response: ScrapResponse): boolean {
+    protected isSameSource(url: string): boolean {
         const parsedUrl = ParseUrl(this.initPage);
-        return response.url && response.url.indexOf(parsedUrl.resource) != -1
+        return url && url.indexOf(parsedUrl.resource) != -1;
     }
 
     protected doesUrlContain(response: ScrapResponse, regex: RegExp): boolean{
@@ -79,7 +81,7 @@ abstract class CoreScrapper implements ScrapperContracts {
     }
 
     protected abstract onFetchComplete(link: string, response: ScrapResponse)
-    protected abstract canFetchUrl(response: ScrapResponse): boolean
+    protected abstract canFetchUrl(url: string): boolean
     protected abstract createJob(link: string): CoreJob
     protected abstract init(): void
 
@@ -90,4 +92,4 @@ abstract class CoreScrapper implements ScrapperContracts {
 
 }
 
-export default CoreScrapper;
+export default CoreScraper;

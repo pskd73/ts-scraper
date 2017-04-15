@@ -12,9 +12,11 @@
         "outDir": "app",
         "sourceMap": true,
         "lib": [
-            "ES2016"
+            "ES2016",
+            "dom"
         ],
-        "watch": true
+        "watch": true,
+        "types": ["node"]
     },
     "include": [
         "./**/*"
