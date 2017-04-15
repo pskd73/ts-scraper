@@ -1,5 +1,5 @@
 import CoreJob from 'app/jobrunner/CoreJob';
-import LinkPageScraper from 'app/LinkPageScraper';
+import LinkPageScraper from 'app/linkscraper/LinkPageScraper';
 import CoreScraper from 'app/scraper/CoreScraper';
 
 class ScrapJob extends CoreJob {

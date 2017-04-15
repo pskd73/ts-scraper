@@ -16,6 +16,7 @@ abstract class CoreScraper implements ScrapperContracts {
     protected scrappedActualPages: Array<string> = []
     protected concurrentConnections: number
     protected startTime: Date
+    protected stickToRootSource: boolean = true
 
     constructor(initPage: string, concurrentConnections: number = 5){
         this.initPage = initPage;
@@ -35,7 +36,11 @@ abstract class CoreScraper implements ScrapperContracts {
             if(actualLink){
                 const parsedLink = this.serializeUrl(actualLink);
                 if(this.scrappedPages.indexOf(parsedLink) == -1){
-                    if(this.canFetchUrl(actualLink)){
+                    let allowFromSource = true;
+                    if(this.stickToRootSource){
+                        allowFromSource = this.isSameSource(actualLink);
+                    }
+                    if(allowFromSource && this.canFetchUrl(actualLink)){
                         const job = this.createJob(actualLink);
                         this.jobrunner.add(job);
                     }

@@ -1,5 +1,5 @@
 import CoreScrapper from 'app/scraper/CoreScraper';
-import ScrapJob from 'app/ScrapJob';
+import ScrapJob from 'app/linkscraper/ScrapJob';
 import ScrapeResponse from 'app/scraper/contracts/ScrapResponse';
 import * as ParseUrl from 'parse-url';
 import * as fs from 'fs';
@@ -29,7 +29,7 @@ class Scrapper extends CoreScrapper {
     }
 
     protected canFetchUrl(url){
-        return this.isSameSource(url);
+        return true;
     }
 
     protected createJob(link){
