@@ -2,7 +2,7 @@ import CoreJob from 'app/core/CoreJob';
 import ScrapPage from 'app/core/ScrapPage';
 import CoreScrapper from 'app/core/CoreScrapper';
 
-class Job extends CoreJob {
+class ScrapJob extends CoreJob {
 
     private scrapPage;
     private scrapper;
@@ -31,4 +31,4 @@ class Job extends CoreJob {
     }
 }
 
-export default Job;
+export default ScrapJob;

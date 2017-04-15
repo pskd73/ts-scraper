@@ -1,5 +1,5 @@
 import JobRunner from 'app/core/JobRunner';
-import ScrapJob from 'app/ScrapJob';
+import CoreJob from 'app/core/CoreJob';
 import ScrapperContracts from 'app/contracts/ScrapperContracts';
 import ScrapResponse from 'app/contracts/ScrapResponse';
 import * as Request from 'request';
@@ -21,7 +21,7 @@ abstract class CoreScrapper implements ScrapperContracts {
         this.initPage = initPage;
         this.concurrentConnections = concurrentConnections;
         this.jobrunner = new JobRunner(this.concurrentConnections);
-        this.jobrunner.add(new ScrapJob(this.initPage, this));
+        this.jobrunner.add(this.createJob(this.initPage));
         this.scrappedPages.push(this.initPage);
         this.init();
     }
@@ -35,7 +35,8 @@ abstract class CoreScrapper implements ScrapperContracts {
             const parsedLink = this.serializeUrl(actualLink);
             if(this.scrappedPages.indexOf(parsedLink) == -1){
                 if(this.canFetchUrl(response)){
-                    this.jobrunner.add(new ScrapJob(actualLink, this));
+                    const job = this.createJob(actualLink);
+                    this.jobrunner.add(job);
                 }
                 this.scrappedPages.push(parsedLink);
                 this.scrappedActualPages.push(actualLink);
@@ -78,10 +79,9 @@ abstract class CoreScrapper implements ScrapperContracts {
     }
 
     protected abstract onFetchComplete(link: string, response: ScrapResponse)
-
     protected abstract canFetchUrl(response: ScrapResponse): boolean
-
-    protected abstract init()
+    protected abstract createJob(link: string): CoreJob
+    protected abstract init(): void
 
     public start(){
         this.startTime = new Date();
