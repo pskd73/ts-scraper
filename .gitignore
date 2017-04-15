@@ -60,5 +60,4 @@ typings/
 app/
 
 *.out
-
-out.csv
+*.out.csv

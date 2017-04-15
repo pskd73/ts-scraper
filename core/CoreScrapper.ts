@@ -23,6 +23,7 @@ abstract class CoreScrapper implements ScrapperContracts {
         this.jobrunner = new JobRunner(this.concurrentConnections);
         this.jobrunner.add(new ScrapJob(this.initPage, this));
         this.scrappedPages.push(this.initPage);
+        this.init();
     }
 
     protected onScrapResponse(response, parentLink){
@@ -33,7 +34,7 @@ abstract class CoreScrapper implements ScrapperContracts {
             const actualLink = links[i];
             const parsedLink = this.serializeUrl(actualLink);
             if(this.scrappedPages.indexOf(parsedLink) == -1){
-                if(this.canFetchUrl(parsedLink, response)){
+                if(this.canFetchUrl(response)){
                     this.jobrunner.add(new ScrapJob(actualLink, this));
                 }
                 this.scrappedPages.push(parsedLink);
@@ -62,9 +63,25 @@ abstract class CoreScrapper implements ScrapperContracts {
         return (this.scrappedPages.length/diff)*1000;
     }
 
+    protected getPriorityForLink(link: string): number {
+        return 10;
+    }
+
+    protected isSameSource(response: ScrapResponse): boolean {
+        const parsedUrl = ParseUrl(this.initPage);
+        return response.url && response.url.indexOf(parsedUrl.resource) != -1
+    }
+
+    protected doesUrlContain(response: ScrapResponse, regex: RegExp): boolean{
+        const matches = response.url.match(regex);
+        return !!(matches && matches.length);
+    }
+
     protected abstract onFetchComplete(link: string, response: ScrapResponse)
 
-    protected abstract canFetchUrl(url: string, response: ScrapResponse): boolean
+    protected abstract canFetchUrl(response: ScrapResponse): boolean
+
+    protected abstract init()
 
     public start(){
         this.startTime = new Date();

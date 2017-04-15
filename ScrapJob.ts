@@ -18,7 +18,6 @@ class Job extends CoreJob {
     async run(){
         try {
             const response = await this.scrapPage.get();
-            console.log('job done', this.priority);
             if(this.scrapper){
                 this.scrapper.onScrapResponse(response, this.url);
             }

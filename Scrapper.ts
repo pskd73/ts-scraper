@@ -1,14 +1,16 @@
 import CoreScrapper from 'app/core/CoreScrapper';
+import ScrapeResponse from 'app/contracts/ScrapResponse';
 import * as ParseUrl from 'parse-url';
 import * as fs from 'fs';
 
 class Scrapper extends CoreScrapper {
 
     protected interestedUrls: Array<string> = []
+    protected fileName: string
 
-    protected generateCsv(links: Array<string>){
-        const string = links.join('\n');
-        fs.writeFile("./out.csv", string, () => {});
+    init(){
+        this.fileName = `${ParseUrl(this.initPage).resource}.out.csv`;
+        this.generateCsv();
     }
 
     protected onFetchComplete(link, response){
@@ -22,26 +24,27 @@ class Scrapper extends CoreScrapper {
         console.log('/*', 'Time:', new Date());
         console.log('/***********************************************');
         if(this.checkForPage(response)){
-            this.generateCsv(this.interestedUrls);
+            this.updateCsv(response);
         }
     }
 
-    protected canFetchUrl(url, response){
-        const parsedUrl = ParseUrl(this.initPage);
-        return url && url.indexOf(parsedUrl.resource) != -1
+    protected canFetchUrl(response){
+        return this.isSameSource(response);
+    }
+
+    protected generateCsv(){
+        fs.writeFile(this.fileName, "link\n", () => {});
+    }
+
+    protected updateCsv(response: ScrapeResponse){
+        fs.appendFile(this.fileName, `${response.url}\n`, function (err) {
+            if (err) throw err;
+        });
     }
 
     protected checkForPage(response){
         const url = response.url;
-        const videoMatches = url.match(/\/video[\d]*\//g);
-        if(!(videoMatches && videoMatches.length)){
-            return false;
-        }
-        const indiaMatches = url.match(/india/g);
-        if(!(indiaMatches && indiaMatches.length)){
-            return false;
-        }
-        if(this.interestedUrls.indexOf(url) != -1){
+        if(!this.isSameSource(response)){
             return false;
         }
         this.interestedUrls.push(url);
