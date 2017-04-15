@@ -1,5 +1,5 @@
 import CoreScrapper from 'app/scraper/CoreScraper';
-import ScrapJob from 'app/linkscraper/ScrapJob';
+import LinkScrapeJob from 'app/linkscraper/LinkScrapeJob';
 import ScrapeResponse from 'app/scraper/contracts/ScrapResponse';
 import * as ParseUrl from 'parse-url';
 import * as fs from 'fs';
@@ -33,7 +33,7 @@ class Scrapper extends CoreScrapper {
     }
 
     protected createJob(link){
-        const job = new ScrapJob(link, this);
+        const job = new LinkScrapeJob(link, this);
         return job;
     }
 

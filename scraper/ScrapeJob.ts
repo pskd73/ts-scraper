@@ -1,18 +1,18 @@
 import CoreJob from 'app/jobrunner/CoreJob';
-import LinkPageScraper from 'app/linkscraper/LinkPageScraper';
+import PageScraper from 'app/scraper/PageScraper';
 import CoreScraper from 'app/scraper/CoreScraper';
 
-class ScrapJob extends CoreJob {
+abstract class ScrapeJob extends CoreJob {
 
-    private scrapPage;
-    private scrapper;
-    private url;
+    protected scrapPage;
+    protected scrapper;
+    protected url;
 
     constructor(url: string, scrapper?: CoreScraper){
         super();
         this.url = url;
         this.scrapper = scrapper;
-        this.scrapPage = new LinkPageScraper(this.url);
+        this.scrapPage = this.createPageScraper(this.url);
     }
 
     async run(){
@@ -29,6 +29,8 @@ class ScrapJob extends CoreJob {
             console.log(e);
         }
     }
+
+    protected abstract createPageScraper(url: string): PageScraper
 }
 
-export default ScrapJob;
+export default ScrapeJob;
