@@ -1,14 +1,17 @@
 import JobRunnerContracts from 'app/contracts/JobRunnerContracts';
 import CoreJob from 'app/core/CoreJob';
 import JobDescription from 'app/contracts/JobDescription';
+import PriorityQue from 'app/contracts/PriorityQue';
+import PriorityElement from 'app/contracts/PriorityElement';
 import * as Lodash from 'lodash';
 
 class JobRunner implements JobRunnerContracts {
 
-    private que: Array<CoreJob> = []
-    private pipe: Array<number> = []
+    private que: Array<PriorityQue> = []
+    private pipe: Array<CoreJob> = []
     private concurrentJobs: number
     private queCompletedPointer: number = -1
+    private isStarted: boolean = false
 
     constructor(concurrentJobs) {
         this.concurrentJobs = concurrentJobs;
@@ -17,22 +20,55 @@ class JobRunner implements JobRunnerContracts {
         }
     }
 
+    private getPriorites(): Array<number> {
+        return Lodash.map(this.que, (priorityQ) => priorityQ.priority);
+    }
+
+    private getQueByPriority(priority: number): PriorityQue {
+        for(var i=0;i<this.que.length;i++){
+            const currentQueSet = this.que[i];
+            if(currentQueSet.priority == priority){
+                return currentQueSet;
+            }
+        }
+        return null;
+    }
+
     private executePipeJob(pipeIndex): void {
-        const job = this.que[this.pipe[pipeIndex]];
+        const job = this.pipe[pipeIndex];
         ((pipeIndex) => {
             job.handle()
                 .then(() => {
-                    this.fetchNextQueElement(pipeIndex);
+                    this.pipe[pipeIndex] = null;
+                    if(this.isStarted){
+                        this.appendJobs();
+                    }
                 });
         })(pipeIndex);
     }
 
+    private getSortedPriorities(): Array<PriorityQue> {
+        return Lodash.sortBy(this.que, [(qs) => qs.priority]).reverse();
+    }
+
+    private getNextJob(): CoreJob {
+        const priorities = this.getSortedPriorities();
+        for(var i=0;i<priorities.length;i++){
+            const prioritySet = priorities[i];
+            const nextIndex = prioritySet.index + 1;
+            if(nextIndex < prioritySet.que.length){
+                prioritySet.index = nextIndex;
+                return prioritySet.que[prioritySet.index];
+            }
+        }
+        return null;
+    }
+
     private fetchNextQueElement(pipeIndex): boolean {
-        const nextQueIndex = this.queCompletedPointer + 1;
+        const nextJob = this.getNextJob();
         let executed = false;
-        if(nextQueIndex < this.que.length){
-            this.pipe[pipeIndex] = nextQueIndex;
-            this.queCompletedPointer++;
+        if(nextJob){
+            this.pipe[pipeIndex] = nextJob;
             this.executePipeJob(pipeIndex);
             executed = true;
         }else{
@@ -49,6 +85,15 @@ class JobRunner implements JobRunnerContracts {
         }
     }
 
+    private appendSingleJob() {
+        for(var i=0;i<this.concurrentJobs;i++){
+            if(this.pipe[i] === null){
+                this.fetchNextQueElement(i);
+                break;
+            }
+        }
+    }
+
     private isPipeDone() {
         return Lodash.every(this.pipe, (job) => job === null);
     }
@@ -57,13 +102,44 @@ class JobRunner implements JobRunnerContracts {
         return this.pipe;
     }
 
+    getPendingJobs(){
+        return this.que.length - this.queCompletedPointer;
+    }
+
+    getQue(){
+        return this.que;
+    }
+
     add(list) {
-        this.que = Lodash.concat(this.que, list);
-        this.appendJobs();
+        if(!Array.isArray(list)){
+            list = [list];
+        }
+        for(var i=0;i<list.length;i++){
+            const job = list[i];
+            const priority = job.priority;
+            let queSet = this.getQueByPriority(priority);
+            if(!queSet){
+                queSet = {
+                    priority,
+                    que: [],
+                    index: -1
+                };
+                this.que.push(queSet);
+            }
+            queSet.que.push(job);
+        }
+        if(this.isStarted){
+            this.appendJobs();
+        }
     }
 
     start(){
+        this.isStarted = true;
         this.appendJobs();
+    }
+
+    next(){
+        this.appendSingleJob();
     }
 }
 

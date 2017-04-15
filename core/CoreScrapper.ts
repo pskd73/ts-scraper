@@ -1,6 +1,7 @@
 import JobRunner from 'app/core/JobRunner';
-import Job from 'app/Job';
+import ScrapJob from 'app/ScrapJob';
 import ScrapperContracts from 'app/contracts/ScrapperContracts';
+import ScrapResponse from 'app/contracts/ScrapResponse';
 import * as Request from 'request';
 import * as jsdom from 'jsdom';
 import * as jquery from 'jquery';
@@ -12,6 +13,7 @@ abstract class CoreScrapper implements ScrapperContracts {
     protected initPage: string
     protected scrappedPages: Array<string> = []
     protected completedLinks: Array<string> = []
+    protected scrappedActualPages: Array<string> = []
     protected concurrentConnections: number
     protected startTime: Date
 
@@ -19,21 +21,23 @@ abstract class CoreScrapper implements ScrapperContracts {
         this.initPage = initPage;
         this.concurrentConnections = concurrentConnections;
         this.jobrunner = new JobRunner(this.concurrentConnections);
-        this.jobrunner.add(new Job(this, this.initPage));
+        this.jobrunner.add(new ScrapJob(this.initPage, this));
         this.scrappedPages.push(this.initPage);
     }
 
-    protected onScrapResponse(links, parentLink){
+    protected onScrapResponse(response, parentLink){
         this.completedLinks.push(parentLink);
-        this.onFetchComplete(parentLink, this.completedLinks, this.scrappedPages);
+        this.onFetchComplete(parentLink, response);
+        const links = response.links;
         for(var i=0;i<links.length;i++){
             const actualLink = links[i];
             const parsedLink = this.serializeUrl(actualLink);
             if(this.scrappedPages.indexOf(parsedLink) == -1){
-                if(this.canFetchUrl(parsedLink)){
-                    this.jobrunner.add(new Job(this, actualLink));
+                if(this.canFetchUrl(parsedLink, response)){
+                    this.jobrunner.add(new ScrapJob(actualLink, this));
                 }
                 this.scrappedPages.push(parsedLink);
+                this.scrappedActualPages.push(actualLink);
             }
         }
     }
@@ -58,9 +62,9 @@ abstract class CoreScrapper implements ScrapperContracts {
         return (this.scrappedPages.length/diff)*1000;
     }
 
-    protected abstract onFetchComplete(link: string, completedLinks: Array<string>, totalScrapedLinks: Array<string>)
+    protected abstract onFetchComplete(link: string, response: ScrapResponse)
 
-    protected abstract canFetchUrl(url: string): boolean
+    protected abstract canFetchUrl(url: string, response: ScrapResponse): boolean
 
     public start(){
         this.startTime = new Date();

@@ -56,7 +56,8 @@ class ScrapPage {
         return {
             links,
             body: response.body,
-            response: response.response
+            response: response.response,
+            url: this.url
         };
     }
 }

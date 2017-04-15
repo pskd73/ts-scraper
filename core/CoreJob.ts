@@ -10,6 +10,7 @@ abstract class CoreJob implements JobContract {
     public endTime
     public state: JobStates
     public response: JobResponse
+    public priority: number = 10
 
     constructor() {
         this.id = uniqid();
