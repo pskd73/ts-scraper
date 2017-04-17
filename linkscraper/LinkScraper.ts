@@ -1,10 +1,10 @@
-import CoreScrapper from 'app/scraper/CoreScraper';
+import CoreScraper from 'app/scraper/CoreScraper';
 import LinkScrapeJob from 'app/linkscraper/LinkScrapeJob';
 import ScrapeResponse from 'app/scraper/contracts/ScrapResponse';
 import * as ParseUrl from 'parse-url';
 import * as fs from 'fs';
 
-class Scrapper extends CoreScrapper {
+class Scrapper extends CoreScraper {
 
     protected interestedUrls: Array<string> = []
     protected fileName: string

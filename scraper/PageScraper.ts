@@ -70,16 +70,17 @@ abstract class PageScraper implements PageScraperContract {
         this.body = body;
         const jQuery = await this.getJquery();
         this.links = this.parseLinks(jQuery);
-        await this.parse(jQuery);
+        const parsedData = await this.parse(jQuery);
         return {
             links: this.links,
             body: this.body,
             response: this.response,
-            url: this.url
+            url: this.url,
+            parsedData
         };
     }
 
-    public abstract parse(jquery: JQuery): void
+    public abstract parse(jquery: JQuery): any
 
 }
 

@@ -9,7 +9,7 @@ import * as ParseUrl from 'parse-url';
 
 abstract class CoreScraper implements ScrapperContracts {
 
-    protected jobrunner: JobRunner
+    private jobrunner: JobRunner
     protected initPage: string
     protected scrappedPages: Array<string> = []
     protected completedLinks: Array<string> = []
