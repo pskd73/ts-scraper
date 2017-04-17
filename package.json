@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_PATH=./ node app/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "author": "Pramod Kumar",
   "license": "MIT",
