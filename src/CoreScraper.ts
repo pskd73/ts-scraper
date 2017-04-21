@@ -26,7 +26,7 @@ abstract class CoreScraper implements ScrapperContracts {
         this.init();
     }
 
-    public onScrapResponse(response, parentLink) {
+    public onScrapResponse(response: ScrapResponse, parentLink: string) {
         this.completedLinks.push(parentLink);
         this.onFetchComplete(parentLink, response);
         const links = response.links;
