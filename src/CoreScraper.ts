@@ -3,8 +3,8 @@ import * as jsdom from "jsdom";
 import * as ParseUrl from "parse-url";
 import * as Request from "request";
 import { CoreJob, JobRunner } from "ts-jobrunner";
-import ScrapperContracts from "./contracts/ScrapperContracts";
 import ScrapResponse from "./contracts/ScrapeResponse";
+import ScrapperContracts from "./contracts/ScrapperContracts";
 
 abstract class CoreScraper implements ScrapperContracts {
 
