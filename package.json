@@ -1,5 +1,5 @@
 {
-  "name": "website-link-scrapper",
+  "name": "ts-scraper",
   "version": "1.0.1",
   "description": "Scarp links present in the website recursively",
   "main": "lib/index.js",
