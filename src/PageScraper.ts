@@ -35,29 +35,6 @@ abstract class PageScraper implements PageScraperContract {
 
     public abstract parse(jquery: JQuery): any;
 
-    private async getJquery(): Promise<JQuery> {
-        let $ = null;
-        if (this.body) {
-            const window = await this.promiseJsdom(this.body);
-            $ = jquery(window);
-        }
-        return $;
-    }
-
-    private parseLinks($): string[] {
-        const anchors = $("a");
-        const links = [];
-        for (const anchor of anchors) {
-            let href = anchor.href;
-            if (href[0] === "/") {
-                const parsedUrl = ParseUrl(this.url);
-                href = parsedUrl.protocol + "://" + parsedUrl.resource + href;
-            }
-            links.push(href);
-        }
-        return links;
-    }
-
     protected promiseRequest(): Promise<any> {
         return new Promise((resolve, reject) => {
             Request(this.url, (err, response, body) => {
@@ -80,6 +57,29 @@ abstract class PageScraper implements PageScraperContract {
                 }
             });
         });
+    }
+
+    private async getJquery(): Promise<JQuery> {
+        let $ = null;
+        if (this.body) {
+            const window = await this.promiseJsdom(this.body);
+            $ = jquery(window);
+        }
+        return $;
+    }
+
+    private parseLinks($): string[] {
+        const anchors = $("a");
+        const links = [];
+        for (const anchor of anchors) {
+            let href = anchor.href;
+            if (href[0] === "/") {
+                const parsedUrl = ParseUrl(this.url);
+                href = parsedUrl.protocol + "://" + parsedUrl.resource + href;
+            }
+            links.push(href);
+        }
+        return links;
     }
 
 }
