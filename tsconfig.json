@@ -14,11 +14,10 @@
         "lib": [
             "ES2016",
             "dom"
-        ],
-        "types": ["node"]
+        ]
     },
     "include": [
-        "./**/*"
+        "./src/**/*"
     ],
     "exclude": [
         "node_modules",

@@ -1,5 +1,5 @@
-interface ScrapperContracts {
-    start()
+interface IScrapperContracts {
+    start();
 }
 
-export default ScrapperContracts;
+export default IScrapperContracts;

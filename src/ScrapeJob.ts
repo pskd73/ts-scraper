@@ -1,6 +1,6 @@
-import { CoreJob } from 'ts-jobrunner';
-import PageScraper from './PageScraper';
-import CoreScraper from './CoreScraper';
+import { CoreJob } from "ts-jobrunner";
+import CoreScraper from "./CoreScraper";
+import PageScraper from "./PageScraper";
 
 abstract class ScrapeJob extends CoreJob {
 
@@ -8,29 +8,32 @@ abstract class ScrapeJob extends CoreJob {
     protected scrapper: CoreScraper;
     protected url: string;
 
-    constructor(url: string, scrapper?: CoreScraper){
+    constructor(url: string, scrapper?: CoreScraper) {
         super();
         this.url = url;
         this.scrapper = scrapper;
         this.scrapPage = this.createPageScraper(this.url);
     }
 
-    async run(){
+    public async run() {
         try {
             const response = await this.scrapPage.start();
-            if(this.scrapper){
+            if (this.scrapper) {
                 this.scrapper.onScrapResponse(response, this.url);
             }
             return {
+                response,
                 status: true,
-                response: response
             };
-        }catch(e){
-            console.log(e);
+        } catch (e) {
+            return {
+                response: e,
+                status: false,
+            };
         }
     }
 
-    protected abstract createPageScraper(url: string): PageScraper
+    protected abstract createPageScraper(url: string): PageScraper;
 }
 
 export default ScrapeJob;

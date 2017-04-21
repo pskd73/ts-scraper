@@ -1,8 +1,8 @@
-interface ScrapResponse {
-    links: Array<string>
-    body: string
-    response: Object
-    url: string
+interface IScrapResponse {
+    links: string[];
+    body: string;
+    response: object;
+    url: string;
 }
 
-export default ScrapResponse;
+export default IScrapResponse;

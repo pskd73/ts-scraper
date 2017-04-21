@@ -1,10 +1,10 @@
-import PageScraper from '../PageScraper';
-import * as ParseUrl from 'parse-url';
+import * as ParseUrl from "parse-url";
+import PageScraper from "../PageScraper";
 
 class LinkPageScraper extends PageScraper {
 
-    parse($){
-
+    public parse($) {
+        return {};
     }
 }
 

@@ -1,9 +1,9 @@
-import ScrapeJob from '../ScrapeJob';
-import LinkPageScraper from './LinkPageScraper';
+import ScrapeJob from "../ScrapeJob";
+import LinkPageScraper from "./LinkPageScraper";
 
 class LinkScrapeJob extends ScrapeJob {
 
-    protected createPageScraper(url){
+    protected createPageScraper(url) {
         return new LinkPageScraper(url);
     }
 

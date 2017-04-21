@@ -2,11 +2,15 @@
   "name": "website-link-scrapper",
   "version": "1.0.0",
   "description": "Scarp links present in the website recursively",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "start": "NODE_PATH=./ node app/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "start": "NODE_PATH=./ node ./lib/index.js",
+    "test": "mocha ./lib/test/index.js",
+    "build": "tsc --declaration \"true\"",
+    "watch": "tsc --watch",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "prepublishOnly": "npm run build && npm run lint && npm test"
   },
   "author": "Pramod Kumar",
   "license": "MIT",
@@ -24,5 +28,13 @@
     "ts-jobrunner": "^1.0.1",
     "uniqid": "^4.1.1",
     "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.5.1",
+    "@types/mocha": "^2.2.41",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "tslint": "^5.1.0",
+    "typescript": "^2.2.2"
   }
 }
