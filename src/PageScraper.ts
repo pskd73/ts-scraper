@@ -13,7 +13,7 @@ abstract class PageScraper implements PageScraperContract {
     public body: string;
     public links: string[] = [];
 
-    constructor(url) {
+    constructor(url: string) {
         this.url = url;
     }
 
