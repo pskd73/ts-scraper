@@ -57,7 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-app/
+lib/
 
 *.out
 *.out.csv
+
+*.ignore/

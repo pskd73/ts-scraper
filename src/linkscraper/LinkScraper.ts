@@ -1,6 +1,6 @@
-import CoreScraper from 'app/scraper/CoreScraper';
-import LinkScrapeJob from 'app/linkscraper/LinkScrapeJob';
-import ScrapeResponse from 'app/scraper/contracts/ScrapResponse';
+import CoreScraper from '../CoreScraper';
+import LinkScrapeJob from './LinkScrapeJob';
+import ScrapeResponse from '../contracts/ScrapResponse';
 import * as ParseUrl from 'parse-url';
 import * as fs from 'fs';
 

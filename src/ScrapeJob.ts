@@ -1,12 +1,12 @@
-import CoreJob from 'app/jobrunner/CoreJob';
-import PageScraper from 'app/scraper/PageScraper';
-import CoreScraper from 'app/scraper/CoreScraper';
+import { CoreJob } from 'ts-jobrunner';
+import PageScraper from './PageScraper';
+import CoreScraper from './CoreScraper';
 
 abstract class ScrapeJob extends CoreJob {
 
-    protected scrapPage;
-    protected scrapper;
-    protected url;
+    protected scrapPage: PageScraper;
+    protected scrapper: CoreScraper;
+    protected url: string;
 
     constructor(url: string, scrapper?: CoreScraper){
         super();

@@ -3,13 +3,13 @@
         "baseUrl": ".",
         "rootDirs": ["app"],
         "paths": {
-            "app/*": ["./*"]
+            "lib/*": ["./*"]
         },
         "noResolve": false,
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "outDir": "app",
+        "outDir": "lib",
         "sourceMap": true,
         "lib": [
             "ES2016",

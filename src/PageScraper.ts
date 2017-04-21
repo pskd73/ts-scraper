@@ -1,5 +1,5 @@
-import ScrapeResponse from 'app/scraper/contracts/ScrapResponse';
-import PageScraperContract from 'app/scraper/contracts/PageScraperContract';
+import ScrapeResponse from './contracts/ScrapResponse';
+import PageScraperContract from './contracts/PageScraperContract';
 import * as Request from 'request';
 import * as jsdom from 'jsdom';
 import * as jquery from 'jquery';

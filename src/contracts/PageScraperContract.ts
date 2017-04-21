@@ -1,5 +1,5 @@
 import * as JQuery from 'jquery';
-import ScrapResponse from 'app/scraper/contracts/ScrapResponse';
+import ScrapResponse from './ScrapResponse';
 
 interface PageScraperContract {
     url: string

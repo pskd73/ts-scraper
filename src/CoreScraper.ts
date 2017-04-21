@@ -1,7 +1,6 @@
-import JobRunner from 'app/jobrunner/JobRunner';
-import CoreJob from 'app/jobrunner/CoreJob';
-import ScrapperContracts from 'app/scraper/contracts/ScrapperContracts';
-import ScrapResponse from 'app/scraper/contracts/ScrapResponse';
+import {CoreJob, JobRunner} from 'ts-jobrunner';
+import ScrapperContracts from './contracts/ScrapperContracts';
+import ScrapResponse from './contracts/ScrapResponse';
 import * as Request from 'request';
 import * as jsdom from 'jsdom';
 import * as jquery from 'jquery';
@@ -27,7 +26,7 @@ abstract class CoreScraper implements ScrapperContracts {
         this.init();
     }
 
-    protected onScrapResponse(response, parentLink){
+    public onScrapResponse(response, parentLink){
         this.completedLinks.push(parentLink);
         this.onFetchComplete(parentLink, response);
         const links = response.links;

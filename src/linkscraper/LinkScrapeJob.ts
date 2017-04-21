@@ -1,5 +1,5 @@
-import ScrapeJob from 'app/scraper/ScrapeJob';
-import LinkPageScraper from 'app/linkscraper/LinkPageScraper';
+import ScrapeJob from '../ScrapeJob';
+import LinkPageScraper from './LinkPageScraper';
 
 class LinkScrapeJob extends ScrapeJob {
 
