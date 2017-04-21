@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as ParseUrl from "parse-url";
-import ScrapeResponse from "../../contracts/ScrapResponse";
+import ScrapeResponse from "../../contracts/ScrapeResponse";
 import CoreScraper from "../../CoreScraper";
 import TestScrapeJob from "./TestScrapeJob";
 

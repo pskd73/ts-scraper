@@ -4,7 +4,7 @@ import * as Lodash from "lodash";
 import * as ParseUrl from "parse-url";
 import * as Request from "request";
 import PageScraperContract from "./contracts/PageScraperContract";
-import ScrapeResponse from "./contracts/ScrapResponse";
+import ScrapeResponse from "./contracts/ScrapeResponse";
 
 abstract class PageScraper implements PageScraperContract {
 

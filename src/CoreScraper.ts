@@ -4,7 +4,7 @@ import * as ParseUrl from "parse-url";
 import * as Request from "request";
 import { CoreJob, JobRunner } from "ts-jobrunner";
 import ScrapperContracts from "./contracts/ScrapperContracts";
-import ScrapResponse from "./contracts/ScrapResponse";
+import ScrapResponse from "./contracts/ScrapeResponse";
 
 abstract class CoreScraper implements ScrapperContracts {
 
