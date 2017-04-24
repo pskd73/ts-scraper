@@ -12,6 +12,10 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "prepublishOnly": "npm run build && npm run lint && npm test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pskd73/ts-scraper"  
+  },
   "author": "Pramod Kumar",
   "license": "MIT",
   "dependencies": {
